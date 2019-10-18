@@ -11,16 +11,9 @@ app.get('/api', (req, res)=>{
 
 app.post('/api/post', verifytoken, (req, res)=>{
 
-    jwt.verify(req.token, 'secretkey', (err, authData)=>{
-        if(err){
-            res.sendStatus(403);
-        }else{
-            res.json({
-                messgae: "weclome to post api",
-                authData
-            });
-        }
-    })
+    res.json({
+        messgae: "weclome to post api"
+    });        
     
 });
 
@@ -50,7 +43,15 @@ const bearerHeader= req.headers['authorization'];
 
         req.token=bearerToken;
 
-        next();
+        jwt.verify(req.token, 'secretkey', (err, authData)=>{
+            if(err){
+                res.sendStatus(403);
+            }else{
+                
+                next();
+            }
+        })
+        
 
     }else{
         res.sendStatus(403);
